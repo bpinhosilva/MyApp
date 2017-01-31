@@ -18,6 +18,10 @@ PUT     /api/user/:id                   controllers.UserController.updateUserByI
 POST    /api/user                       controllers.UserController.insertUser
 DELETE  /api/user/:id                   controllers.UserController.removeUseByIndex(id: Long)
 
+GET     /api/login                      controllers.LoginController.login
+GET     /api/logout                     controllers.LoginController.logout
+GET     /api/loggedin                   controllers.LoginController.loggedin
+
 GET     /vai                            controllers.Default.redirect(to = "/")
 
 #GET    /                               controllers.Default.redirect(to = "/index.html")
