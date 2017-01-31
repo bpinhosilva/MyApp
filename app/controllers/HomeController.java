@@ -1,9 +1,10 @@
 package controllers;
 
-import models.User;
-import play.libs.Json;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
+
+import java.io.File;
 
 /**
  * This controller contains an action to handle HTTP requests
@@ -18,10 +19,17 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
     public Result index() {
-        User user = new User("Bruno", 27);
-
-        return ok(Json.toJson(user));
-
-        //return ok(index.render("Your new application is ready."));
+        return ok(new java.io.File("/public/index.html"));
     }
+
+    public Result redirect() {
+        return redirect("/");
+    }
+
+    public Result catchAll(String path) {
+        Logger.info("Inside catch all");
+
+        return ok(new File("/public/index.html")).as("text/html");
+    }
+
 }
