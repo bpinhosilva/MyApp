@@ -13,9 +13,7 @@ import java.io.File;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-import static play.mvc.Results.notFound;
-import static play.mvc.Results.ok;
-import static play.mvc.Results.redirect;
+import static play.mvc.Results.*;
 
 @Singleton
 public class ErrorHandler extends DefaultHttpErrorHandler {
@@ -40,7 +38,7 @@ public class ErrorHandler extends DefaultHttpErrorHandler {
 
     @Override
     protected CompletionStage<Result> onNotFound(RequestHeader request, String message) {
-        Logger.error("ErrorHandler - Not found: " + request.toString());
+        Logger.error(this.getClass().getName() + " - Not found: " + request.toString());
 
         if (request.path().contains("/api")) {
             ObjectNode result = Json.newObject();
@@ -50,23 +48,21 @@ public class ErrorHandler extends DefaultHttpErrorHandler {
             return CompletableFuture.completedFuture(notFound(result));
         }
 
-        //return CompletableFuture.completedFuture(redirect("/"));
-
         return CompletableFuture.completedFuture(ok(new File("public/index.html")).as("text/html"));
     }
 
     @Override
     protected CompletionStage<Result> onBadRequest(RequestHeader request, String message) {
-        Logger.error("Bad request: " + request.toString());
+        Logger.error(this.getClass().getName() + " - Bad request: " + request.toString());
 
         if (request.path().contains("/api")) {
             ObjectNode result = Json.newObject();
 
             result.put("msg", "Bad request");
 
-            return CompletableFuture.completedFuture(notFound(result));
+            return CompletableFuture.completedFuture(badRequest(result));
         }
 
-        return CompletableFuture.completedFuture(redirect("/"));
+        return CompletableFuture.completedFuture(ok(new File("public/index.html")).as("text/html"));
     }
 }
