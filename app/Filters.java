@@ -1,10 +1,12 @@
-import javax.inject.*;
-import play.*;
-import play.mvc.EssentialFilter;
-import play.http.HttpFilters;
-import play.mvc.*;
-
 import filters.ExampleFilter;
+import filters.LoggingFilter;
+import play.Environment;
+import play.Mode;
+import play.http.HttpFilters;
+import play.mvc.EssentialFilter;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * This class configures filters that run on every request. This
@@ -20,15 +22,17 @@ public class Filters implements HttpFilters {
 
     private final Environment env;
     private final EssentialFilter exampleFilter;
+    private final LoggingFilter loggingFilter;
 
     /**
      * @param env Basic environment settings for the current application.
      * @param exampleFilter A demonstration filter that adds a header to
      */
     @Inject
-    public Filters(Environment env, ExampleFilter exampleFilter) {
+    public Filters(Environment env, ExampleFilter exampleFilter, LoggingFilter loggingFilter) {
         this.env = env;
         this.exampleFilter = exampleFilter;
+        this.loggingFilter = loggingFilter;
     }
 
     @Override
@@ -37,7 +41,7 @@ public class Filters implements HttpFilters {
       // we're running in production or test mode then don't use any
       // filters at all.
       if (env.mode().equals(Mode.DEV)) {
-          return new EssentialFilter[] { exampleFilter };
+          return new EssentialFilter[] { exampleFilter, loggingFilter };
       } else {
          return new EssentialFilter[] {};
       }
