@@ -17,11 +17,13 @@ import static play.mvc.Results.*;
 
 @Singleton
 public class ErrorHandler extends DefaultHttpErrorHandler {
+    private final Environment env;
 
     @Inject
     public ErrorHandler(Configuration configuration, Environment environment,
                         OptionalSourceMapper sourceMapper, Provider<Router> routes) {
         super(configuration, environment, sourceMapper, routes);
+        this.env = environment;
     }
 
     protected CompletionStage<Result> onProdServerError(RequestHeader request, UsefulException exception) {
@@ -48,7 +50,7 @@ public class ErrorHandler extends DefaultHttpErrorHandler {
             return CompletableFuture.completedFuture(notFound(result));
         }
 
-        return CompletableFuture.completedFuture(ok(new File("public/index.html")).as("text/html"));
+        return CompletableFuture.completedFuture(ok(env.getFile("public/index.html")).as("text/html"));
     }
 
     @Override
@@ -63,6 +65,6 @@ public class ErrorHandler extends DefaultHttpErrorHandler {
             return CompletableFuture.completedFuture(badRequest(result));
         }
 
-        return CompletableFuture.completedFuture(ok(new File("public/index.html")).as("text/html"));
+        return CompletableFuture.completedFuture(ok(env.getFile("public/index.html")).as("text/html"));
     }
 }
