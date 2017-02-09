@@ -1,6 +1,8 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Logger;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -20,8 +22,12 @@ public class LoginController extends Controller {
     }
 
     public Result loggedin() {
-        if (session("user") != null) {
-            return ok(session("user"));
+        if (!session().isEmpty()) {
+            ObjectNode result = Json.newObject();
+
+            session().forEach((key, value) -> result.put(key, value) );
+
+            return ok(result);
         }
         else {
             return notFound();
