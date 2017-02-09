@@ -3,17 +3,16 @@ package controllers;
 import models.User;
 import play.Logger;
 import play.libs.Json;
-import play.mvc.BodyParser;
-import play.mvc.Controller;
-import play.mvc.Http;
-import play.mvc.Result;
+import play.mvc.*;
 import utils.UserBodyParser;
+import utils.VerboseAction;
 
 import java.util.ArrayList;
 
 public class UserController extends Controller {
     static private ArrayList<User> usersList = new ArrayList<>();
 
+    @With(VerboseAction.class)
     public Result getUsers() {
         return ok(Json.toJson(usersList));
     }
