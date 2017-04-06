@@ -11,7 +11,12 @@ libraryDependencies ++= Seq(
   javaWs,
   jdbc,
   evolutions,
-  "mysql" % "mysql-connector-java" % "5.1.36"
+  "mysql" % "mysql-connector-java" % "5.1.36",
+  "com.typesafe.play.modules" %% "play-modules-redis" % "2.5.0"
+)
+
+resolvers ++= Seq(
+    "google-sedis-fix" at "http://pk11-scratch.googlecode.com/svn/trunk"
 )
 
 import com.typesafe.sbt.packager.MappingsHelper._

@@ -3,7 +3,9 @@ package controllers;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Result;
+import redis.clients.jedis.JedisPool;
 
+import javax.inject.Inject;
 import java.io.File;
 
 /**
@@ -11,6 +13,8 @@ import java.io.File;
  * to the application's home page.
  */
 public class HomeController extends Controller {
+    @Inject
+    private JedisPool jedisPool;
 
     /**
      * An action that renders an HTML page with a welcome message.
@@ -31,5 +35,16 @@ public class HomeController extends Controller {
 
         return ok(new File("/public/index.html")).as("text/html");
     }
+
+    public Result cache() {
+        if (jedisPool.getResource().get("teste") == null) {
+            jedisPool.getResource().set("teste", new String("bruno"));
+        }
+        else {
+            Logger.info(jedisPool.getResource().get("teste"));
+        }
+        return ok();
+    }
+
 
 }

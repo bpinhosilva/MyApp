@@ -10,6 +10,7 @@
 # GET     /message                    controllers.AsyncController.message
 
 GET     /testAsync                  controllers.TestAsync.index
+GET /cache                              controllers.HomeController.cache
 
 # Users routes
 GET     /api/user                       controllers.UserController.getUsers
